@@ -8,6 +8,7 @@ import java.awt.event.ActionListener;
 
 import javax.swing.BorderFactory;
 import javax.swing.Box;
+import javax.swing.BoxLayout;
 import javax.swing.ButtonGroup;
 import javax.swing.GroupLayout;
 import javax.swing.JButton;
@@ -46,9 +47,12 @@ public class AppView extends JFrame implements ActionListener
 	
 	public AppView()
 	{
-		setTitle("Rejestracja wyników badañ");
-		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-		setLayout(new GridBagLayout());
+		this.setTitle("Rejestracja wyników badañ");
+		this.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+		this.setLayout(new GridBagLayout());
+		this.setPreferredSize(new Dimension(840,400));
+		this.setMinimumSize(new Dimension(840,400));
+		this.setMaximumSize(new Dimension(840,400));
 		
 		//********pasek narzêdzi******
 		
@@ -86,15 +90,15 @@ public class AppView extends JFrame implements ActionListener
 
 		lImie = new JLabel("Imiê:");
 
-		tImie=new JTextField(20);
+		tImie=new JTextField(10);
 		
 		lNazwisko = new JLabel("Nazwisko:");
 
-		tNazwisko=new JTextField(20);
+		tNazwisko=new JTextField(10);
 		
 		lPesel = new JLabel("PESEL:");
 
-		tPesel=new JTextField(20);
+		tPesel=new JTextField(10);
 		
 		lPlec = new JLabel("P³eæ:");
 
@@ -255,48 +259,71 @@ public class AppView extends JFrame implements ActionListener
 		
 		listaPacjentow = new JPanel();
 		listaPacjentow.setBorder(BorderFactory.createTitledBorder("Lista Pacjentów"));
-		listaPacjentow.setSize(300,300);
 		ulozenie.gridx = 1;
 		ulozenie.gridy = 0;
 		ulozenie.gridheight = 2;
 		ulozenie.fill = GridBagConstraints.VERTICAL;
+		
+		listaPacjentow.setPreferredSize(new Dimension(500,300));
+		listaPacjentow.setMinimumSize(new Dimension(500,300));
+		listaPacjentow.setMaximumSize(new Dimension(1000,900));
+		
 		this.getContentPane().add(listaPacjentow,ulozenie); //dodanie kontenera do okna g³ównego
 		this.pack();	 
 		
 		GroupLayout layoutListaP = new GroupLayout(listaPacjentow);
 		listaPacjentow.setLayout(layoutListaP);
 		
-		JScrollPane suwak = new JScrollPane();
+		
+		
+		suwak = new JScrollPane();
 		tablicaPacjentow = new JTable();
-		tablicaPacjentow.setModel(new DefaultTableModel(new String[] {"Imiê i nazwisko", "P³eæ", "PESEL", "Ubezpieczenie", "Badanie"}, 50));
-		tablicaPacjentow.setRowHeight(15);
+		tablicaPacjentow.setModel(new DefaultTableModel(new String[] {"Imiê i nazwisko", "P³eæ", "PESEL", "Ubezpieczenie", "Badanie"}, 25));
+		tablicaPacjentow.setRowHeight(20);
 		suwak.setViewportView(tablicaPacjentow);
-		listaPacjentow.add(suwak);
 		
 		
 		bDodaj = new JButton("Dodaj");
 
 		bUsun = new JButton("Usuñ");
-		
-	//	layoutListaP.setAutoCreateGaps(true);
-	//	layoutListaP.setHorizontalGroup(layoutListaP.createSequentialGroup()
-	//	.addGroup(layoutListaP.createParallelGroup(GroupLayout.Alignment.LEADING )
-	//					.addComponent(tablicaPacjentow)
-	//		.addGroup(layoutListaP.createSequentialGroup()
-	//					.addComponent(bDodaj)
-	//					.addComponent(bUsun))));
 
 		
-	//	layoutListaP.setVerticalGroup(layoutListaP.createSequentialGroup()					
-	//					.addGroup(layoutListaP.createParallelGroup(GroupLayout.Alignment.BASELINE)
-	//					.addComponent(tablicaPacjentow)
-	//					.addGroup(layoutListaP.createParallelGroup(GroupLayout.Alignment.BASELINE)
-	//						.addComponent(bZapiszBadanie)
-	//						.addComponent(bAnulujBadanie))));
+		//Ustawiamy tylko suwak!!!!
 		
+		layoutListaP.setAutoCreateGaps(true);
+		layoutListaP.setHorizontalGroup(layoutListaP.createSequentialGroup()
+				.addGroup(layoutListaP.createParallelGroup(GroupLayout.Alignment.LEADING )  
+						.addComponent(suwak)	
+				.addGroup(layoutListaP.createSequentialGroup()
+						.addComponent(bDodaj)
+						.addComponent(bUsun))));
+
+
 		
+		layoutListaP.setVerticalGroup(layoutListaP.createSequentialGroup()					
+				.addGroup(layoutListaP.createParallelGroup(GroupLayout.Alignment.BASELINE)
+						.addComponent(suwak))
+				.addGroup(layoutListaP.createParallelGroup(GroupLayout.Alignment.BASELINE)
+						.addComponent(bDodaj)
+						.addComponent(bUsun)));
+	
 	}
 
+	public void setController(ActionListener c)
+	 {
+	 this.bZapiszPacjenta.addActionListener(c);
+	 this.bAnulujPacjenta.addActionListener(c);
+	 this.bZapiszBadanie.addActionListener(c);
+	 this.bAnulujBadanie.addActionListener(c);
+	 this.bDodaj.addActionListener(c);
+	 this.bUsun.addActionListener(c);
+	 this.boxUbezpieczenie.addActionListener(c);
+	 this.kobieta.addActionListener(c);
+	 this.mezczyzna.addActionListener(c);
+	// this.SDzien.addChangeListener(c);
+	// this.SMiesiac.addComponentListener(c);
+	// this.SRok.addComponentListener(c);
+	 }
 
 
 	@Override
@@ -320,8 +347,8 @@ public class AppView extends JFrame implements ActionListener
 				 @Override
 				 public void run()
 				 {
-				 AppView appMenu = new AppView();
-				 appMenu.setVisible(true);
+				 AppView app = new AppView();
+				 app.setVisible(true);
 				 }
 			 };
 			 SwingUtilities.invokeLater(thread);   //wersja z wyk³adu
