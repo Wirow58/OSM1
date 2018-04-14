@@ -2,13 +2,10 @@
 import java.awt.Dimension;
 import java.awt.GridBagConstraints;
 import java.awt.GridBagLayout;
-import java.awt.Insets;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 
 import javax.swing.BorderFactory;
-import javax.swing.Box;
-import javax.swing.BoxLayout;
 import javax.swing.ButtonGroup;
 import javax.swing.GroupLayout;
 import javax.swing.JButton;
@@ -28,7 +25,7 @@ import javax.swing.KeyStroke;
 import javax.swing.SwingUtilities;
 import javax.swing.table.DefaultTableModel;
 
-public class AppView extends JFrame implements ActionListener
+public class AppView extends JFrame //implements ActionListener
 {
 	
 	private JMenuBar menuBar;
@@ -39,7 +36,7 @@ public class AppView extends JFrame implements ActionListener
 	private JLabel lImie, lNazwisko, lPesel, lPlec, lUbezpieczenie, lData, lHDL, lLDL, lGlicerydy;
 	private ButtonGroup radioPanel;
 	private JRadioButton kobieta, mezczyzna;
-	private JComboBox boxUbezpieczenie;
+	private JComboBox<String> boxUbezpieczenie;
 	private JButton bZapiszPacjenta, bAnulujPacjenta, bZapiszBadanie, bAnulujBadanie, bDodaj, bUsun;
 	private JSpinner SDzien, SMiesiac,SRok;
 	private JTable tablicaPacjentow;
@@ -63,7 +60,6 @@ public class AppView extends JFrame implements ActionListener
 		
 		menuAplikacja.add(apZamknij);
 		
-		apZamknij.addActionListener(this);
 		apZamknij.setAccelerator(KeyStroke.getKeyStroke("alt F4"));  //dodanie skrótu klawiszowego
 		
 		setJMenuBar(menuBar); //dodanie menue Bar
@@ -85,8 +81,6 @@ public class AppView extends JFrame implements ActionListener
 		//u³o¿enie kompontntów
 		GroupLayout layoutDaneP = new GroupLayout(danePacjenta);
 		danePacjenta.setLayout(layoutDaneP);
-		//this.getContentePane().add(lyoutDanePacjenta)
-		
 
 		lImie = new JLabel("Imiê:");
 
@@ -176,7 +170,7 @@ public class AppView extends JFrame implements ActionListener
 		
 		badanie = new JPanel();
 		badanie.setBorder(BorderFactory.createTitledBorder("Badanie"));
-		//badanie.setPreferredSize(new Dimension(350,250));
+
 		ulozenie.gridx = 0;
 		ulozenie.gridy = 1;
 		this.getContentPane().add(badanie,ulozenie); //dodanie kontenera do okna g³ównego
@@ -288,7 +282,7 @@ public class AppView extends JFrame implements ActionListener
 		bUsun = new JButton("Usuñ");
 
 		
-		//Ustawiamy tylko suwak!!!!
+		//Ustawiamy tylko suwak!
 		
 		layoutListaP.setAutoCreateGaps(true);
 		layoutListaP.setHorizontalGroup(layoutListaP.createSequentialGroup()
@@ -309,7 +303,7 @@ public class AppView extends JFrame implements ActionListener
 	
 	}
 
-	public void setController(ActionListener c)
+	public void setController(ActionListener c)  //pozwala œledziæ zewnêtrznemu kontrolerowi zdarzenia generowane przez swoje kontrolki
 	 {
 	 this.bZapiszPacjenta.addActionListener(c);
 	 this.bAnulujPacjenta.addActionListener(c);
@@ -320,39 +314,18 @@ public class AppView extends JFrame implements ActionListener
 	 this.boxUbezpieczenie.addActionListener(c);
 	 this.kobieta.addActionListener(c);
 	 this.mezczyzna.addActionListener(c);
-	// this.SDzien.addChangeListener(c);
+	 this.apZamknij.addActionListener(c);
+	// this.SDzien.addAncestorListener(c);
 	// this.SMiesiac.addComponentListener(c);
 	// this.SRok.addComponentListener(c);
 	 }
 
+	//public void setValue(int value) //pozwala kontrolerowi wp³ywaæ na stan kontorlek
+	 //{
+	//	this.mEdit.setText(String.valueOf(value));  <- Przyk³ad
+	// 	this.tablicaPacjentow.setToolTipText(String.valueOf(value)); <-coœ zle
+	// }
 
-	@Override
-	public void actionPerformed(ActionEvent e) 
-	{
-		Object z = e.getSource();
-		
-		if (z==apZamknij)
-		{
-			dispose();  //zamkniêcie okna
-		}
-		
-	}
-	
-	
-	public static void main (String[] args)
-	{		
-		{
-			 Runnable thread=new Runnable()
-			 {
-				 @Override
-				 public void run()
-				 {
-				 AppView app = new AppView();
-				 app.setVisible(true);
-				 }
-			 };
-			 SwingUtilities.invokeLater(thread);   //wersja z wyk³adu
-		}
-	}
+
 
 }
