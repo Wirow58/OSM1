@@ -39,7 +39,9 @@ public class AppView extends JFrame //implements ActionListener
 	private JComboBox<String> boxUbezpieczenie;
 	private JButton bZapiszPacjenta, bAnulujPacjenta, bZapiszBadanie, bAnulujBadanie, bDodaj, bUsun;
 	private JSpinner SDzien, SMiesiac,SRok;
-	private JTable tablicaPacjentow;
+	//private JTable tablicaPacjentow;
+    private String[] tblHead = {"Imiê i nazwisko", "P³eæ", "PESEL", "Ubezpieczenie", "Badanie"};
+    private DefaultTableModel dtm=new DefaultTableModel(tblHead, 0);
 	private JScrollPane suwak;
 	
 	public AppView()
@@ -57,6 +59,7 @@ public class AppView extends JFrame //implements ActionListener
 		menuAplikacja = new JMenu("Aplikacja");
 		
 		apZamknij = new JMenuItem("Zamknij");
+
 		
 		menuAplikacja.add(apZamknij);
 		
@@ -85,14 +88,20 @@ public class AppView extends JFrame //implements ActionListener
 		lImie = new JLabel("Imiê:");
 
 		tImie=new JTextField(10);
+
+		tImie.setEditable(false);
 		
 		lNazwisko = new JLabel("Nazwisko:");
 
 		tNazwisko=new JTextField(10);
+
+		tNazwisko.setEditable(false);
 		
 		lPesel = new JLabel("PESEL:");
 
 		tPesel=new JTextField(10);
+
+		tPesel.setEditable(false);
 		
 		lPlec = new JLabel("P³eæ:");
 
@@ -101,9 +110,13 @@ public class AppView extends JFrame //implements ActionListener
 		radioPanel = new ButtonGroup();
 		
 		kobieta = new JRadioButton("Kobieta");
-		kobieta.setSelected(true);  //ustawienie wciœniêtego
+		kobieta.setActionCommand("K");
+		//kobieta.setSelected(true);  //ustawienie wciœniêtego
+        kobieta.setEnabled(false);
 		
 		mezczyzna = new JRadioButton("Mê¿czyzna");
+		mezczyzna.setActionCommand("M");
+		mezczyzna.setEnabled(false);
 		
 		radioPanel.add(kobieta);
 		radioPanel.add(mezczyzna);
@@ -117,12 +130,17 @@ public class AppView extends JFrame //implements ActionListener
 		boxUbezpieczenie.addItem("NFZ");
 		boxUbezpieczenie.addItem("prywatne");
 		boxUbezpieczenie.addItem("brak");
+
+		boxUbezpieczenie.setEnabled(false);
 		
 		//przyciski zapisz i anuluj
 		
 		bZapiszPacjenta = new JButton("Zapisz");
-		
+		bZapiszPacjenta.setActionCommand("ZapiszPacjenta");
+		bZapiszPacjenta.setEnabled(false);
 		bAnulujPacjenta = new JButton("Anuluj");
+		bAnulujPacjenta.setActionCommand("AnulujPacjenta");
+		bAnulujPacjenta.setEnabled(false);
 		
 		
 		layoutDaneP.setAutoCreateGaps(true);
@@ -204,8 +222,10 @@ public class AppView extends JFrame //implements ActionListener
 		tGlicerydy=new JTextField();
 		
 		bZapiszBadanie = new JButton("Zapisz");
+		bZapiszBadanie.setActionCommand("ZapiszBadanie");
 		
 		bAnulujBadanie = new JButton("Anuluj");
+		bAnulujBadanie.setActionCommand("AnulujBadanie");
 
 		//U³o¿enie komponentów
 		
@@ -267,14 +287,22 @@ public class AppView extends JFrame //implements ActionListener
 		
 		GroupLayout layoutListaP = new GroupLayout(listaPacjentow);
 		listaPacjentow.setLayout(layoutListaP);
-		
+
 		
 		
 		suwak = new JScrollPane();
-		tablicaPacjentow = new JTable();
+		/*tablicaPacjentow = new JTable();
 		tablicaPacjentow.setModel(new DefaultTableModel(new String[] {"Imiê i nazwisko", "P³eæ", "PESEL", "Ubezpieczenie", "Badanie"}, 25));
-		tablicaPacjentow.setRowHeight(20);
+		tablicaPacjentow.setRowHeight(20);*/
+
+		//tablicaPacjentow.setModel(dtm);
+        JTable tablicaPacjentow = new JTable(dtm);
 		suwak.setViewportView(tablicaPacjentow);
+        /*String[] item={"A","B","C","D","E"};
+        String[] item1={"1","2","3","4","5"};*/
+
+        /*dtm.addRow(item);
+        dtm.insertRow(1, item1);*/
 		
 		
 		bDodaj = new JButton("Dodaj");
@@ -326,6 +354,38 @@ public class AppView extends JFrame //implements ActionListener
 	// 	this.tablicaPacjentow.setToolTipText(String.valueOf(value)); <-coœ zle
 	// }
 
+    public void EnablePatientFields(){
+	    tImie.setEditable(true);
+	    tNazwisko.setEditable(true);
+	    tPesel.setEditable(true);
+	    kobieta.setEnabled(true);
+	    mezczyzna.setEnabled(true);
+	    boxUbezpieczenie.setEnabled(true);
+	    bZapiszPacjenta.setEnabled(true);
+	    bAnulujPacjenta.setEnabled(true);
+    }
 
+    public String getImie(){
+	    return tImie.getText();
+    }
 
+    public String getNazwisko(){
+	    return tNazwisko.getText();
+    }
+
+    public String getPesel(){
+	    return tPesel.getText();
+    }
+
+    public String getUbezpieczenie(){
+	    return (String)boxUbezpieczenie.getSelectedItem();
+    }
+
+    public char getPlec(){
+	    return radioPanel.getSelection().getActionCommand().charAt(0);
+    }
+
+    public DefaultTableModel getDtm(){
+	    return dtm;
+    }
 }
