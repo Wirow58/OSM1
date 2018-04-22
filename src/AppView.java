@@ -1,7 +1,5 @@
 
-import java.awt.Dimension;
-import java.awt.GridBagConstraints;
-import java.awt.GridBagLayout;
+import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 
@@ -23,6 +21,8 @@ import javax.swing.JTable;
 import javax.swing.JTextField;
 import javax.swing.KeyStroke;
 import javax.swing.SwingUtilities;
+import javax.swing.event.ListSelectionListener;
+import javax.swing.event.TableModelListener;
 import javax.swing.table.DefaultTableModel;
 
 public class AppView extends JFrame //implements ActionListener
@@ -41,8 +41,26 @@ public class AppView extends JFrame //implements ActionListener
 	private JSpinner SDzien, SMiesiac,SRok;
 	//private JTable tablicaPacjentow;
     private String[] tblHead = {"Imiê i nazwisko", "P³eæ", "PESEL", "Ubezpieczenie", "Badanie"};
-    private DefaultTableModel dtm=new DefaultTableModel(tblHead, 0);
+    private MyTableModel dtm=new MyTableModel(tblHead, 0){
+        Class[] types = {
+                String.class, String.class, String.class, String.class, Boolean.class
+        };
+        @Override
+        public Class getColumnClass(int columnIndex){
+            return types[columnIndex];
+        }
+    };
+    /*private DefaultTableModel dtm=new DefaultTableModel(tblHead, 0){
+    	Class[] types = {
+    	String.class, String.class, String.class, String.class, Boolean.class
+		};
+    	@Override
+    	public Class getColumnClass(int columnIndex){
+    		return types[columnIndex];
+		}
+	};*/
 	private JScrollPane suwak;
+    private JTable tablicaPacjentow = new JTable(dtm);
 	
 	public AppView()
 	{
@@ -296,11 +314,15 @@ public class AppView extends JFrame //implements ActionListener
 		tablicaPacjentow.setRowHeight(20);*/
 
 		//tablicaPacjentow.setModel(dtm);
-        JTable tablicaPacjentow = new JTable(dtm);
+
+
 		suwak.setViewportView(tablicaPacjentow);
         /*String[] item={"A","B","C","D","E"};
         String[] item1={"1","2","3","4","5"};*/
-
+		//tablicaPacjentow.setCellSelectionEnabled(false);
+		//tablicaPacjentow.setRowSelectionAllowed(true);
+		/*tablicaPacjentow.setEnabled(true);
+        tablicaPacjentow.setUpdateSelectionOnSort(false);*/
         /*dtm.addRow(item);
         dtm.insertRow(1, item1);*/
 		
@@ -343,6 +365,7 @@ public class AppView extends JFrame //implements ActionListener
 	 this.kobieta.addActionListener(c);
 	 this.mezczyzna.addActionListener(c);
 	 this.apZamknij.addActionListener(c);
+
 	// this.SDzien.addAncestorListener(c);
 	// this.SMiesiac.addComponentListener(c);
 	// this.SRok.addComponentListener(c);
@@ -353,6 +376,12 @@ public class AppView extends JFrame //implements ActionListener
 	//	this.mEdit.setText(String.valueOf(value));  <- Przyk³ad
 	// 	this.tablicaPacjentow.setToolTipText(String.valueOf(value)); <-coœ zle
 	// }
+    public void setTableController(ListSelectionListener lsl){
+        this.tablicaPacjentow.getSelectionModel().addListSelectionListener(lsl);
+        //this.dtm.addTableModelListener(tml);
+    }
+
+
 
     public void EnablePatientFields(){
 	    tImie.setEditable(true);
@@ -365,10 +394,29 @@ public class AppView extends JFrame //implements ActionListener
 	    bAnulujPacjenta.setEnabled(true);
     }
 
+    public void ClearPatientFields(){
+        tImie.setText(null);
+        tNazwisko.setText(null);
+        tPesel.setText(null);
+        kobieta.setSelected(false);
+        mezczyzna.setSelected(false);
+        //boxUbezpieczenie.setS
+        //bZapiszPacjenta.setEnabled(true);
+        //bAnulujPacjenta.setEnabled(true);
+    }
+
+    public void ClearExaminationFields(){
+        SDzien.setValue(20);
+        SMiesiac.setValue(12);
+        SRok.setValue(1996);
+        tHDL.setText(null);
+        tLDL.setText(null);
+        tGlicerydy.setText(null);
+    }
+
     public String getImie(){
 	    return tImie.getText();
     }
-
     public String getNazwisko(){
 	    return tNazwisko.getText();
     }
@@ -380,12 +428,34 @@ public class AppView extends JFrame //implements ActionListener
     public String getUbezpieczenie(){
 	    return (String)boxUbezpieczenie.getSelectedItem();
     }
-
     public char getPlec(){
 	    return radioPanel.getSelection().getActionCommand().charAt(0);
     }
-
     public DefaultTableModel getDtm(){
 	    return dtm;
     }
+    public JTable getTable(){
+	    return tablicaPacjentow;
+    }
+    public int getDzien(){
+	    return (int)SDzien.getValue();
+    }
+    public int getMiesiac(){
+	    return (int)SMiesiac.getValue();
+    }
+    public int getRok(){
+	    return  (int)SRok.getValue() ;
+	}
+	public String getHDL(){
+	    return tHDL.getText();
+    }
+    public String getLDL(){
+        return tLDL.getText();
+    }
+    public String getGlicerydy(){
+	    return tGlicerydy.getText();
+    }
+
+
+
 }

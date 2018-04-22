@@ -14,6 +14,7 @@ public class Model
 				 AppView view = new AppView();
 				 AppController ctrl = new AppController(view);
 				 view.setController(ctrl);
+				 view.setTableController(ctrl);
 				 view.setVisible(true);
 				 }
 			 };

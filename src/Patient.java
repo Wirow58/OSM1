@@ -1,3 +1,5 @@
+import java.util.Vector;
+
 public class Patient {
     private String imie, nazwisko, pesel, ubezpieczenie;
     private char plec;
@@ -6,7 +8,7 @@ public class Patient {
     private int rok_badania;
     private int HDL;
     private int LDL;
-    private int trojglic;
+    private int glicerydy;
     private boolean czy_badany;
 
     public Patient(String imie, String nazwisko, String pesel, String ubezpieczenie, char plec){
@@ -24,20 +26,20 @@ public class Patient {
 
     //GETTERY
 
-    public String[] getPatientAsArray(){
-        String[] patientArray = new String[5];
-        patientArray[0]=imie+" "+nazwisko;
-        patientArray[1]=Character.toString(plec);
-        patientArray[2]=pesel;
-        patientArray[3]=ubezpieczenie;
-        patientArray[4]=Boolean.toString(czy_badany);
-        return patientArray;
+    public Vector<Object> getPatientAsVector(){
+        Vector<Object> patientVector = new Vector<>();
+        patientVector.add(imie+" "+nazwisko);
+        patientVector.add(plec);
+        patientVector.add(pesel);
+        patientVector.add(ubezpieczenie);
+        patientVector.add(Boolean.FALSE);
+        return patientVector;
     }
 
 
 
 
-    public boolean isCzy_badany() {
+    public boolean getCzy_badany() {
         return czy_badany;
     }
 
@@ -81,8 +83,8 @@ public class Patient {
         return LDL;
     }
 
-    public int getTrojglic() {
-        return trojglic;
+    public int getGlicerydy() {
+        return glicerydy;
     }
 
     //SETTERY
@@ -131,7 +133,7 @@ public class Patient {
         this.LDL=LDL;
     }
 
-    public void setTrojglic(int trojglic) {
-        this.trojglic = trojglic;
+    public void setGlicerydy(int glicerydy) {
+        this.glicerydy = glicerydy;
     }
 }
