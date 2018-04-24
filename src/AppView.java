@@ -1,331 +1,548 @@
 
-import java.awt.Dimension;
-import java.awt.GridBagConstraints;
-import java.awt.GridBagLayout;
+import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 
-import javax.swing.BorderFactory;
-import javax.swing.ButtonGroup;
-import javax.swing.GroupLayout;
-import javax.swing.JButton;
-import javax.swing.JComboBox;
-import javax.swing.JFrame;
-import javax.swing.JLabel;
-import javax.swing.JMenu;
-import javax.swing.JMenuBar;
-import javax.swing.JMenuItem;
-import javax.swing.JPanel;
-import javax.swing.JRadioButton;
-import javax.swing.JScrollPane;
-import javax.swing.JSpinner;
-import javax.swing.JTable;
-import javax.swing.JTextField;
-import javax.swing.KeyStroke;
-import javax.swing.SwingUtilities;
+import javax.swing.*;
+import javax.swing.event.ListSelectionListener;
+import javax.swing.event.TableModelListener;
 import javax.swing.table.DefaultTableModel;
 
 public class AppView extends JFrame //implements ActionListener
 {
-	
-	private JMenuBar menuBar;
-	private JMenu menuAplikacja;
-	private JMenuItem apZamknij;
-	private JPanel danePacjenta, badanie,listaPacjentow;
-	private JTextField tImie, tNazwisko, tPesel, tHDL, tLDL, tGlicerydy;
-	private JLabel lImie, lNazwisko, lPesel, lPlec, lUbezpieczenie, lData, lHDL, lLDL, lGlicerydy;
-	private ButtonGroup radioPanel;
-	private JRadioButton kobieta, mezczyzna;
-	private JComboBox<String> boxUbezpieczenie;
-	private JButton bZapiszPacjenta, bAnulujPacjenta, bZapiszBadanie, bAnulujBadanie, bDodaj, bUsun;
-	private JSpinner SDzien, SMiesiac,SRok;
-	private JTable tablicaPacjentow;
-	private JScrollPane suwak;
-	
-	public AppView()
-	{
-		this.setTitle("Rejestracja wyników badañ");
-		this.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-		this.setLayout(new GridBagLayout());
-		this.setPreferredSize(new Dimension(840,400));
-		this.setMinimumSize(new Dimension(840,400));
-		this.setMaximumSize(new Dimension(840,400));
-		
-		//********pasek narzêdzi******
-		
-		menuBar = new JMenuBar(); //tworzenie paska menu
-		menuAplikacja = new JMenu("Aplikacja");
-		
-		apZamknij = new JMenuItem("Zamknij");
-		
-		menuAplikacja.add(apZamknij);
-		
-		apZamknij.setAccelerator(KeyStroke.getKeyStroke("alt F4"));  //dodanie skrótu klawiszowego
-		
-		setJMenuBar(menuBar); //dodanie menue Bar
-		menuBar.add(menuAplikacja);  //dodanie do paska opcji aplikacja
-		
-		//********kontener dane pacjenta******
 
-		//u³o¿enie okna dane w oknie g³ównym
-		danePacjenta = new JPanel();
-		GridBagConstraints ulozenie = new GridBagConstraints();
-		ulozenie.fill = GridBagConstraints.HORIZONTAL;
-		
-		danePacjenta.setBorder(BorderFactory.createTitledBorder("Dane dacjenta"));
-		ulozenie.gridx = 0;
-		ulozenie.gridy = 0;
-		this.getContentPane().add(danePacjenta,ulozenie); //dodanie kontenera do okna g³ównego
-		//this.pack();
-		
-		//u³o¿enie kompontntów
-		GroupLayout layoutDaneP = new GroupLayout(danePacjenta);
-		danePacjenta.setLayout(layoutDaneP);
-
-		lImie = new JLabel("Imiê:");
-
-		tImie=new JTextField(10);
-		
-		lNazwisko = new JLabel("Nazwisko:");
-
-		tNazwisko=new JTextField(10);
-		
-		lPesel = new JLabel("PESEL:");
-
-		tPesel=new JTextField(10);
-		
-		lPlec = new JLabel("P³eæ:");
-
-		//dodawanie wyboru
-		
-		radioPanel = new ButtonGroup();
-		
-		kobieta = new JRadioButton("Kobieta");
-		kobieta.setSelected(true);  //ustawienie wciœniêtego
-		
-		mezczyzna = new JRadioButton("Mê¿czyzna");
-		
-		radioPanel.add(kobieta);
-		radioPanel.add(mezczyzna);
-		
-		//
-		
-		lUbezpieczenie = new JLabel("Ubezpieczenie:");
-
-		//lista rozwijana
-		boxUbezpieczenie = new JComboBox();
-		boxUbezpieczenie.addItem("NFZ");
-		boxUbezpieczenie.addItem("prywatne");
-		boxUbezpieczenie.addItem("brak");
-		
-		//przyciski zapisz i anuluj
-		
-		bZapiszPacjenta = new JButton("Zapisz");
-		
-		bAnulujPacjenta = new JButton("Anuluj");
-		
-		
-		layoutDaneP.setAutoCreateGaps(true);
-		layoutDaneP.setHorizontalGroup(layoutDaneP.createSequentialGroup()
-		.addGroup(layoutDaneP.createParallelGroup(GroupLayout.Alignment.LEADING )
-						.addComponent(lImie)
-						.addComponent(lNazwisko)
-						.addComponent(lPesel)
-						.addComponent(lPlec)
-						.addComponent(lUbezpieczenie)
-						.addGroup(layoutDaneP.createSequentialGroup()
-							.addComponent(bZapiszPacjenta)
-							.addComponent(bAnulujPacjenta)))
-		.addGroup(layoutDaneP.createParallelGroup(GroupLayout.Alignment.LEADING)
-						.addComponent(tImie)
-						.addComponent(tNazwisko)
-						.addComponent(tPesel)
-						.addGroup(layoutDaneP.createSequentialGroup()
-						.addComponent(kobieta)
-						.addComponent(mezczyzna))
-						.addComponent(boxUbezpieczenie)));
-		
-		layoutDaneP.setVerticalGroup(layoutDaneP.createSequentialGroup()					
-						.addGroup(layoutDaneP.createParallelGroup(GroupLayout.Alignment.BASELINE)
-							.addComponent(lImie)
-							.addComponent(tImie))
-						.addGroup(layoutDaneP.createParallelGroup(GroupLayout.Alignment.BASELINE)
-							.addComponent(lNazwisko)
-							.addComponent(tNazwisko))
-						.addGroup(layoutDaneP.createParallelGroup(GroupLayout.Alignment.BASELINE)
-							.addComponent(lPesel)
-							.addComponent(tPesel))
-						.addGroup(layoutDaneP.createParallelGroup(GroupLayout.Alignment.BASELINE)
-							.addComponent(lPlec)
-							.addComponent(kobieta)
-							.addComponent(mezczyzna))
-						.addGroup(layoutDaneP.createParallelGroup(GroupLayout.Alignment.BASELINE)
-							.addComponent(lUbezpieczenie)
-							.addComponent(boxUbezpieczenie))
-						.addGroup(layoutDaneP.createParallelGroup(GroupLayout.Alignment.BASELINE)
-							.addComponent(bZapiszPacjenta)
-							.addComponent(bAnulujPacjenta)));
-
-		//****** panel badanie ******
-		
-		badanie = new JPanel();
-		badanie.setBorder(BorderFactory.createTitledBorder("Badanie"));
-
-		ulozenie.gridx = 0;
-		ulozenie.gridy = 1;
-		this.getContentPane().add(badanie,ulozenie); //dodanie kontenera do okna g³ównego
-		this.pack();
-		
-		GroupLayout layoutBadanie = new GroupLayout(badanie);
-		badanie.setLayout(layoutBadanie);
-		
-		lData = new JLabel("Data:");
-		
-		SDzien = new JSpinner();
-		SDzien.setValue(20);
-		
-		SMiesiac = new JSpinner();
-		SMiesiac.setValue(12);
-		
-		SRok = new JSpinner();
-		SRok.setValue(1996);
-		
-		
-		lHDL = new JLabel("Poziom holesterolu HDL:");
-
-		tHDL=new JTextField();
-
-		lLDL = new JLabel("Poziom holesterolu LDL:");
-		
-		tLDL=new JTextField();
-
-		lGlicerydy = new JLabel("Poziom trójglicerydów:");
-		
-		tGlicerydy=new JTextField();
-		
-		bZapiszBadanie = new JButton("Zapisz");
-		
-		bAnulujBadanie = new JButton("Anuluj");
-
-		//U³o¿enie komponentów
-		
-		layoutBadanie.setAutoCreateGaps(true);
-		layoutBadanie.setHorizontalGroup(layoutBadanie.createSequentialGroup()
-		.addGroup(layoutBadanie.createParallelGroup(GroupLayout.Alignment.LEADING )
-						.addComponent(lData)
-						.addComponent(lHDL)
-						.addComponent(lLDL)
-						.addComponent(lGlicerydy)
-			.addGroup(layoutBadanie.createSequentialGroup()
-						.addComponent(bZapiszBadanie)
-						.addComponent(bAnulujBadanie)))
-		.addGroup(layoutBadanie.createParallelGroup(GroupLayout.Alignment.LEADING)
-						.addGroup(layoutBadanie.createSequentialGroup()
-								.addComponent(SDzien)
-								.addComponent(SMiesiac)
-								.addComponent(SRok))
-								.addComponent(tHDL)
-								.addComponent(tLDL)
-								.addComponent(tGlicerydy)));
-
-		
-		layoutBadanie.setVerticalGroup(layoutBadanie.createSequentialGroup()					
-						.addGroup(layoutBadanie.createParallelGroup(GroupLayout.Alignment.BASELINE)
-							.addComponent(lData)
-							.addComponent(SDzien)
-							.addComponent(SMiesiac)
-							.addComponent(SRok))
-						.addGroup(layoutBadanie.createParallelGroup(GroupLayout.Alignment.BASELINE)
-							.addComponent(lHDL)
-							.addComponent(tHDL))
-						.addGroup(layoutBadanie.createParallelGroup(GroupLayout.Alignment.BASELINE)
-							.addComponent(lLDL)
-							.addComponent(tLDL))
-						.addGroup(layoutBadanie.createParallelGroup(GroupLayout.Alignment.BASELINE)
-							.addComponent(lGlicerydy)
-							.addComponent(tGlicerydy))
-						.addGroup(layoutBadanie.createParallelGroup(GroupLayout.Alignment.BASELINE)
-							.addComponent(bZapiszBadanie)
-							.addComponent(bAnulujBadanie)));
-		
-		
-		//******** Lista pacjentów **********
-		
-		listaPacjentow = new JPanel();
-		listaPacjentow.setBorder(BorderFactory.createTitledBorder("Lista Pacjentów"));
-		ulozenie.gridx = 1;
-		ulozenie.gridy = 0;
-		ulozenie.gridheight = 2;
-		ulozenie.fill = GridBagConstraints.VERTICAL;
-		
-		listaPacjentow.setPreferredSize(new Dimension(500,300));
-		listaPacjentow.setMinimumSize(new Dimension(500,300));
-		listaPacjentow.setMaximumSize(new Dimension(1000,900));
-		
-		this.getContentPane().add(listaPacjentow,ulozenie); //dodanie kontenera do okna g³ównego
-		this.pack();	 
-		
-		GroupLayout layoutListaP = new GroupLayout(listaPacjentow);
-		listaPacjentow.setLayout(layoutListaP);
-		
-		
-		
-		suwak = new JScrollPane();
-		tablicaPacjentow = new JTable();
-		tablicaPacjentow.setModel(new DefaultTableModel(new String[] {"Imiê i nazwisko", "P³eæ", "PESEL", "Ubezpieczenie", "Badanie"}, 25));
-		tablicaPacjentow.setRowHeight(20);
-		suwak.setViewportView(tablicaPacjentow);
-		
-		
-		bDodaj = new JButton("Dodaj");
-
-		bUsun = new JButton("Usuñ");
-
-		
-		//Ustawiamy tylko suwak!
-		
-		layoutListaP.setAutoCreateGaps(true);
-		layoutListaP.setHorizontalGroup(layoutListaP.createSequentialGroup()
-				.addGroup(layoutListaP.createParallelGroup(GroupLayout.Alignment.LEADING )  
-						.addComponent(suwak)	
-				.addGroup(layoutListaP.createSequentialGroup()
-						.addComponent(bDodaj)
-						.addComponent(bUsun))));
+    private JMenuBar menuBar;
+    private JMenu menuAplikacja;
+    private JMenuItem apZamknij;
+    private JPanel danePacjenta, badanie, listaPacjentow;
 
 
-		
-		layoutListaP.setVerticalGroup(layoutListaP.createSequentialGroup()					
-				.addGroup(layoutListaP.createParallelGroup(GroupLayout.Alignment.BASELINE)
-						.addComponent(suwak))
-				.addGroup(layoutListaP.createParallelGroup(GroupLayout.Alignment.BASELINE)
-						.addComponent(bDodaj)
-						.addComponent(bUsun)));
-	
-	}
+    private JTextField tImie, tNazwisko, tPesel, tHDL, tLDL, tGlicerydy;
+    private JLabel lImie, lNazwisko, lPesel, lPlec, lUbezpieczenie, lData, lHDL, lLDL, lGlicerydy;
+    private ButtonGroup radioPanel;
+    private JRadioButton kobieta, mezczyzna;
+    private JComboBox<String> boxUbezpieczenie;
+    private JButton bZapiszPacjenta, bAnulujPacjenta, bZapiszBadanie, bAnulujBadanie, bDodaj, bUsun;
+    private JSpinner SDzien, SMiesiac, SRok;
+    //private JTable tablicaPacjentow;
+    private String[] tblHead = {"ImiÄ™ i nazwisko", "PÅ‚eÄ‡", "PESEL", "Ubezpieczenie", "Badanie"};
+    private MyTableModel dtm = new MyTableModel(tblHead, 0) {
+        Class[] types = {
+                String.class, String.class, String.class, String.class, Boolean.class
+        };
 
-	public void setController(ActionListener c)  //pozwala œledziæ zewnêtrznemu kontrolerowi zdarzenia generowane przez swoje kontrolki
-	 {
-	 this.bZapiszPacjenta.addActionListener(c);
-	 this.bAnulujPacjenta.addActionListener(c);
-	 this.bZapiszBadanie.addActionListener(c);
-	 this.bAnulujBadanie.addActionListener(c);
-	 this.bDodaj.addActionListener(c);
-	 this.bUsun.addActionListener(c);
-	 this.boxUbezpieczenie.addActionListener(c);
-	 this.kobieta.addActionListener(c);
-	 this.mezczyzna.addActionListener(c);
-	 this.apZamknij.addActionListener(c);
-	// this.SDzien.addAncestorListener(c);
-	// this.SMiesiac.addComponentListener(c);
-	// this.SRok.addComponentListener(c);
-	 }
+        @Override
+        public Class getColumnClass(int columnIndex) {
+            return types[columnIndex];
+        }
+    };
+    /*private DefaultTableModel dtm=new DefaultTableModel(tblHead, 0){
+    	Class[] types = {
+    	String.class, String.class, String.class, String.class, Boolean.class
+		};
+    	@Override
+    	public Class getColumnClass(int columnIndex){
+    		return types[columnIndex];
+		}
+	};*/
+    private JScrollPane suwak;
+    private JTable tablicaPacjentow = new JTable(dtm);
 
-	//public void setValue(int value) //pozwala kontrolerowi wp³ywaæ na stan kontorlek
-	 //{
-	//	this.mEdit.setText(String.valueOf(value));  <- Przyk³ad
-	// 	this.tablicaPacjentow.setToolTipText(String.valueOf(value)); <-coœ zle
-	// }
+    public AppView() {
+        this.setTitle("Rejestracja wynikÃ³w badaÅ„");
+        this.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+        this.setLayout(new GridBagLayout());
+        this.setPreferredSize(new Dimension(840, 400));
+        this.setMinimumSize(new Dimension(840, 400));
+        this.setMaximumSize(new Dimension(840, 400));
 
+        //********pasek narzÄ™dzi******
+
+        menuBar = new JMenuBar(); //tworzenie paska menu
+        menuAplikacja = new JMenu("Aplikacja");
+
+        apZamknij = new JMenuItem("Zamknij");
+
+
+        menuAplikacja.add(apZamknij);
+
+        apZamknij.setAccelerator(KeyStroke.getKeyStroke("alt F4"));  //dodanie skrÃ³tu klawiszowego
+
+        setJMenuBar(menuBar); //dodanie menue Bar
+        menuBar.add(menuAplikacja);  //dodanie do paska opcji aplikacja
+
+        //********kontener dane pacjenta******
+
+        //uÅ‚oÅ¼enie okna dane w oknie gÅ‚Ã³wnym
+        danePacjenta = new JPanel();
+        GridBagConstraints ulozenie = new GridBagConstraints();
+        ulozenie.fill = GridBagConstraints.HORIZONTAL;
+
+        danePacjenta.setBorder(BorderFactory.createTitledBorder("Dane dacjenta"));
+        ulozenie.gridx = 0;
+        ulozenie.gridy = 0;
+        this.getContentPane().add(danePacjenta, ulozenie); //dodanie kontenera do okna gÅ‚Ã³wnego
+        //this.pack();
+
+        //uÅ‚oÅ¼enie kompontntÃ³w
+        GroupLayout layoutDaneP = new GroupLayout(danePacjenta);
+        danePacjenta.setLayout(layoutDaneP);
+
+        lImie = new JLabel("ImiÄ™:");
+
+        tImie = new JTextField(10);
+
+        tImie.setEditable(false);
+
+        lNazwisko = new JLabel("Nazwisko:");
+
+        tNazwisko = new JTextField(10);
+
+        tNazwisko.setEditable(false);
+
+        lPesel = new JLabel("PESEL:");
+
+        tPesel = new JTextField(10);
+
+        tPesel.setEditable(false);
+
+        lPlec = new JLabel("PÅ‚eÄ‡:");
+
+        //dodawanie wyboru
+
+        radioPanel = new ButtonGroup();
+
+        kobieta = new JRadioButton("Kobieta");
+        kobieta.setActionCommand("K");
+        //kobieta.setSelected(true);  //ustawienie wciÅ›niÄ™tego
+        kobieta.setEnabled(false);
+
+        mezczyzna = new JRadioButton("MÄ™Å¼czyzna");
+        mezczyzna.setActionCommand("M");
+        mezczyzna.setEnabled(false);
+
+        radioPanel.add(kobieta);
+        radioPanel.add(mezczyzna);
+
+        //
+
+        lUbezpieczenie = new JLabel("Ubezpieczenie:");
+
+        //lista rozwijana
+        boxUbezpieczenie = new JComboBox();
+        boxUbezpieczenie.addItem("NFZ");
+        boxUbezpieczenie.addItem("prywatne");
+        boxUbezpieczenie.addItem("brak");
+
+        boxUbezpieczenie.setEnabled(false);
+
+        //przyciski zapisz i anuluj
+
+        bZapiszPacjenta = new JButton("Zapisz");
+        bZapiszPacjenta.setActionCommand("ZapiszPacjenta");
+        bZapiszPacjenta.setEnabled(false);
+        bAnulujPacjenta = new JButton("Anuluj");
+        bAnulujPacjenta.setActionCommand("AnulujPacjenta");
+        bAnulujPacjenta.setEnabled(false);
+
+
+        layoutDaneP.setAutoCreateGaps(true);
+        layoutDaneP.setHorizontalGroup(layoutDaneP.createSequentialGroup()
+                .addGroup(layoutDaneP.createParallelGroup(GroupLayout.Alignment.LEADING)
+                        .addComponent(lImie)
+                        .addComponent(lNazwisko)
+                        .addComponent(lPesel)
+                        .addComponent(lPlec)
+                        .addComponent(lUbezpieczenie)
+                        .addGroup(layoutDaneP.createSequentialGroup()
+                                .addComponent(bZapiszPacjenta)
+                                .addComponent(bAnulujPacjenta)))
+                .addGroup(layoutDaneP.createParallelGroup(GroupLayout.Alignment.LEADING)
+                        .addComponent(tImie)
+                        .addComponent(tNazwisko)
+                        .addComponent(tPesel)
+                        .addGroup(layoutDaneP.createSequentialGroup()
+                                .addComponent(kobieta)
+                                .addComponent(mezczyzna))
+                        .addComponent(boxUbezpieczenie)));
+
+        layoutDaneP.setVerticalGroup(layoutDaneP.createSequentialGroup()
+                .addGroup(layoutDaneP.createParallelGroup(GroupLayout.Alignment.BASELINE)
+                        .addComponent(lImie)
+                        .addComponent(tImie))
+                .addGroup(layoutDaneP.createParallelGroup(GroupLayout.Alignment.BASELINE)
+                        .addComponent(lNazwisko)
+                        .addComponent(tNazwisko))
+                .addGroup(layoutDaneP.createParallelGroup(GroupLayout.Alignment.BASELINE)
+                        .addComponent(lPesel)
+                        .addComponent(tPesel))
+                .addGroup(layoutDaneP.createParallelGroup(GroupLayout.Alignment.BASELINE)
+                        .addComponent(lPlec)
+                        .addComponent(kobieta)
+                        .addComponent(mezczyzna))
+                .addGroup(layoutDaneP.createParallelGroup(GroupLayout.Alignment.BASELINE)
+                        .addComponent(lUbezpieczenie)
+                        .addComponent(boxUbezpieczenie))
+                .addGroup(layoutDaneP.createParallelGroup(GroupLayout.Alignment.BASELINE)
+                        .addComponent(bZapiszPacjenta)
+                        .addComponent(bAnulujPacjenta)));
+
+        //****** panel badanie ******
+
+        badanie = new JPanel();
+        badanie.setBorder(BorderFactory.createTitledBorder("Badanie"));
+
+        ulozenie.gridx = 0;
+        ulozenie.gridy = 1;
+        this.getContentPane().add(badanie, ulozenie); //dodanie kontenera do okna gÅ‚Ã³wnego
+        this.pack();
+
+        GroupLayout layoutBadanie = new GroupLayout(badanie);
+        badanie.setLayout(layoutBadanie);
+
+        lData = new JLabel("Data:");
+
+        SpinnerNumberModel d_numberSpinnerModel = new SpinnerNumberModel(1, 1, 31, 1);
+        SpinnerNumberModel m_numberSpinnerModel = new SpinnerNumberModel(1, 1, 12, 1);
+        SpinnerNumberModel r_numberSpinnerModel = new SpinnerNumberModel(2000, 1, 3000, 1);
+
+        SDzien = new JSpinner(d_numberSpinnerModel);
+        //SDzien.setValue(1);
+        SDzien.setEnabled(false);
+        SMiesiac = new JSpinner(m_numberSpinnerModel);
+        //SMiesiac.setValue(1);
+        SMiesiac.setEnabled(false);
+        SRok = new JSpinner(r_numberSpinnerModel);
+        //SRok.setValue(2000);
+        SRok.setEnabled(false);
+
+        lHDL = new JLabel("Poziom holesterolu HDL:");
+
+        tHDL = new JTextField();
+        tHDL.setEditable(false);
+
+        lLDL = new JLabel("Poziom holesterolu LDL:");
+
+        tLDL = new JTextField();
+        tLDL.setEditable(false);
+
+        lGlicerydy = new JLabel("Poziom trÃ³jglicerydÃ³w:");
+
+        tGlicerydy = new JTextField();
+        tGlicerydy.setEditable(false);
+
+        bZapiszBadanie = new JButton("Zapisz");
+        bZapiszBadanie.setActionCommand("ZapiszBadanie");
+        bZapiszBadanie.setEnabled(false);
+
+        bAnulujBadanie = new JButton("Anuluj");
+        bAnulujBadanie.setActionCommand("AnulujBadanie");
+        bAnulujBadanie.setEnabled(false);
+
+        //UÅ‚oÅ¼enie komponentÃ³w
+
+        layoutBadanie.setAutoCreateGaps(true);
+        layoutBadanie.setHorizontalGroup(layoutBadanie.createSequentialGroup()
+                .addGroup(layoutBadanie.createParallelGroup(GroupLayout.Alignment.LEADING)
+                        .addComponent(lData)
+                        .addComponent(lHDL)
+                        .addComponent(lLDL)
+                        .addComponent(lGlicerydy)
+                        .addGroup(layoutBadanie.createSequentialGroup()
+                                .addComponent(bZapiszBadanie)
+                                .addComponent(bAnulujBadanie)))
+                .addGroup(layoutBadanie.createParallelGroup(GroupLayout.Alignment.LEADING)
+                        .addGroup(layoutBadanie.createSequentialGroup()
+                                .addComponent(SDzien)
+                                .addComponent(SMiesiac)
+                                .addComponent(SRok))
+                        .addComponent(tHDL)
+                        .addComponent(tLDL)
+                        .addComponent(tGlicerydy)));
+
+
+        layoutBadanie.setVerticalGroup(layoutBadanie.createSequentialGroup()
+                .addGroup(layoutBadanie.createParallelGroup(GroupLayout.Alignment.BASELINE)
+                        .addComponent(lData)
+                        .addComponent(SDzien)
+                        .addComponent(SMiesiac)
+                        .addComponent(SRok))
+                .addGroup(layoutBadanie.createParallelGroup(GroupLayout.Alignment.BASELINE)
+                        .addComponent(lHDL)
+                        .addComponent(tHDL))
+                .addGroup(layoutBadanie.createParallelGroup(GroupLayout.Alignment.BASELINE)
+                        .addComponent(lLDL)
+                        .addComponent(tLDL))
+                .addGroup(layoutBadanie.createParallelGroup(GroupLayout.Alignment.BASELINE)
+                        .addComponent(lGlicerydy)
+                        .addComponent(tGlicerydy))
+                .addGroup(layoutBadanie.createParallelGroup(GroupLayout.Alignment.BASELINE)
+                        .addComponent(bZapiszBadanie)
+                        .addComponent(bAnulujBadanie)));
+
+
+        //******** Lista pacjentÃ³w **********
+
+        listaPacjentow = new JPanel();
+        listaPacjentow.setBorder(BorderFactory.createTitledBorder("Lista PacjentÃ³w"));
+        ulozenie.gridx = 1;
+        ulozenie.gridy = 0;
+        ulozenie.gridheight = 2;
+        ulozenie.fill = GridBagConstraints.VERTICAL;
+
+        listaPacjentow.setPreferredSize(new Dimension(500, 300));
+        listaPacjentow.setMinimumSize(new Dimension(500, 300));
+        listaPacjentow.setMaximumSize(new Dimension(1000, 900));
+
+        this.getContentPane().add(listaPacjentow, ulozenie); //dodanie kontenera do okna gÅ‚Ã³wnego
+        this.pack();
+
+        GroupLayout layoutListaP = new GroupLayout(listaPacjentow);
+        listaPacjentow.setLayout(layoutListaP);
+
+
+        suwak = new JScrollPane();
+		/*tablicaPacjentow = new JTable();
+		tablicaPacjentow.setModel(new DefaultTableModel(new String[] {"ImiÄ™ i nazwisko", "PÅ‚eÄ‡", "PESEL", "Ubezpieczenie", "Badanie"}, 25));
+		tablicaPacjentow.setRowHeight(20);*/
+
+        //tablicaPacjentow.setModel(dtm);
+
+
+        suwak.setViewportView(tablicaPacjentow);
+        /*String[] item={"A","B","C","D","E"};
+        String[] item1={"1","2","3","4","5"};*/
+        //tablicaPacjentow.setCellSelectionEnabled(false);
+        //tablicaPacjentow.setRowSelectionAllowed(true);
+		/*tablicaPacjentow.setEnabled(true);
+        tablicaPacjentow.setUpdateSelectionOnSort(false);*/
+        /*dtm.addRow(item);
+        dtm.insertRow(1, item1);*/
+
+
+        bDodaj = new JButton("Dodaj");
+
+        bUsun = new JButton("UsuÅ„");
+        bUsun.setEnabled(false);
+
+        //Ustawiamy tylko suwak!
+
+        layoutListaP.setAutoCreateGaps(true);
+        layoutListaP.setHorizontalGroup(layoutListaP.createSequentialGroup()
+                .addGroup(layoutListaP.createParallelGroup(GroupLayout.Alignment.LEADING)
+                        .addComponent(suwak)
+                        .addGroup(layoutListaP.createSequentialGroup()
+                                .addComponent(bDodaj)
+                                .addComponent(bUsun))));
+
+
+        layoutListaP.setVerticalGroup(layoutListaP.createSequentialGroup()
+                .addGroup(layoutListaP.createParallelGroup(GroupLayout.Alignment.BASELINE)
+                        .addComponent(suwak))
+                .addGroup(layoutListaP.createParallelGroup(GroupLayout.Alignment.BASELINE)
+                        .addComponent(bDodaj)
+                        .addComponent(bUsun)));
+
+    }
+
+    public void setController(ActionListener c)  //pozwala Å›ledziÄ‡ zewnÄ™trznemu kontrolerowi zdarzenia generowane przez swoje kontrolki
+    {
+        this.bZapiszPacjenta.addActionListener(c);
+        this.bAnulujPacjenta.addActionListener(c);
+        this.bZapiszBadanie.addActionListener(c);
+        this.bAnulujBadanie.addActionListener(c);
+        this.bDodaj.addActionListener(c);
+        this.bUsun.addActionListener(c);
+        this.boxUbezpieczenie.addActionListener(c);
+        this.kobieta.addActionListener(c);
+        this.mezczyzna.addActionListener(c);
+        this.apZamknij.addActionListener(c);
+
+
+    }
+
+
+
+    public void setTableController(ListSelectionListener lsl) {
+        this.tablicaPacjentow.getSelectionModel().addListSelectionListener(lsl);
+    }
+
+    public void EnableDeleteButton() {
+        bUsun.setEnabled(true);
+    }
+
+    public void DisableDeleteButton() {
+        bUsun.setEnabled(false);
+    }
+
+    public void EnablePatientFields() {
+
+        tImie.setEditable(true);
+        tNazwisko.setEditable(true);
+        tPesel.setEditable(true);
+        kobieta.setEnabled(true);
+        mezczyzna.setEnabled(true);
+        boxUbezpieczenie.setEnabled(true);
+        bZapiszPacjenta.setEnabled(true);
+        bAnulujPacjenta.setEnabled(true);
+    }
+
+    public void DisablePatientFields() {
+
+        tImie.setEditable(false);
+        tNazwisko.setEditable(false);
+        tPesel.setEditable(false);
+        kobieta.setEnabled(false);
+        mezczyzna.setEnabled(false);
+        boxUbezpieczenie.setEnabled(false);
+        bZapiszPacjenta.setEnabled(false);
+        bAnulujPacjenta.setEnabled(false);
+    }
+
+    public void EnableExaminationFields() {
+        SDzien.setEnabled(true);
+        SMiesiac.setEnabled(true);
+        SRok.setEnabled(true);
+        tHDL.setEditable(true);
+        tLDL.setEditable(true);
+        tGlicerydy.setEditable(true);
+        bZapiszBadanie.setEnabled(true);
+        bAnulujBadanie.setEnabled(true);
+    }
+
+    public void DisableExaminationFields() {
+        SDzien.setEnabled(false);
+        SMiesiac.setEnabled(false);
+        SRok.setEnabled(false);
+        tHDL.setEditable(false);
+        tLDL.setEditable(false);
+        tGlicerydy.setEditable(false);
+        bZapiszBadanie.setEnabled(false);
+        bAnulujBadanie.setEnabled(false);
+    }
+
+    public void ClearPatientFields() {
+        tImie.setText(null);
+        tNazwisko.setText(null);
+        tPesel.setText(null);
+        radioPanel.clearSelection();
+        boxUbezpieczenie.setSelectedIndex(0);
+
+    }
+
+    public void ClearExaminationFields() {
+        SDzien.setValue(20);
+        SMiesiac.setValue(12);
+        SRok.setValue(1996);
+        tHDL.setText(null);
+        tLDL.setText(null);
+        tGlicerydy.setText(null);
+    }
+
+    public String getImie() {
+        return tImie.getText();
+    }
+
+    public String getNazwisko() {
+        return tNazwisko.getText();
+    }
+
+    public String getPesel() {
+        return tPesel.getText();
+    }
+
+    public String getUbezpieczenie() {
+        return (String) boxUbezpieczenie.getSelectedItem();
+    }
+
+    public char getPlec() {
+        return radioPanel.getSelection().getActionCommand().charAt(0);
+    }
+
+    public DefaultTableModel getDtm() {
+        return dtm;
+    }
+
+    public JTable getTable() {
+        return tablicaPacjentow;
+    }
+
+    public int getDzien() {
+        return (int) SDzien.getValue();
+    }
+
+    public int getMiesiac() {
+        return (int) SMiesiac.getValue();
+    }
+
+    public int getRok() {
+        return (int) SRok.getValue();
+    }
+
+    public String getHDL() {
+        return tHDL.getText();
+    }
+
+    public String getLDL() {
+        return tLDL.getText();
+    }
+
+    public String getGlicerydy() {
+        return tGlicerydy.getText();
+    }
+
+    public JTextField gettImie() {
+        return tImie;
+    }
+
+    public JTextField gettNazwisko() {
+        return tNazwisko;
+    }
+
+    public JTextField gettPesel() {
+        return tPesel;
+    }
+
+    public JTextField gettHDL() {
+        return tHDL;
+    }
+
+    public JTextField gettLDL() {
+        return tLDL;
+    }
+
+    public JTextField gettGlicerydy() {
+        return tGlicerydy;
+    }
+
+    public JRadioButton getKobieta() {
+        return kobieta;
+    }
+
+    public boolean radioTest() {
+        return radioPanel.getSelection() == null;
+    }
+
+
+    public JRadioButton getMezczyzna() {
+        return mezczyzna;
+    }
+
+    public JComboBox<String> getBoxUbezpieczenie() {
+        return boxUbezpieczenie;
+    }
+
+    public JSpinner getSDzien() {
+        return SDzien;
+    }
+
+    public JSpinner getSMiesiac() {
+        return SMiesiac;
+    }
+
+    public JSpinner getSRok() {
+        return SRok;
+    }
 
 
 }
