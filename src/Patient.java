@@ -3,40 +3,44 @@ import java.util.Vector;
 public class Patient {
     private String imie, nazwisko, pesel, ubezpieczenie;
     private char plec;
-    private int dzien_badania;
-    private int miesiac_badania;
-    private int rok_badania;
+    private int dzien_badania = 1;
+    private int miesiac_badania = 1;
+    private int rok_badania = 2000;
     private int HDL;
     private int LDL;
     private int glicerydy;
     private boolean czy_badany;
 
-    public Patient(String imie, String nazwisko, String pesel, String ubezpieczenie, char plec){
+    public Patient(String imie, String nazwisko, String pesel, String ubezpieczenie, char plec) {
         this.imie = imie;
-        this.nazwisko=nazwisko;
-        this.pesel=pesel;
-        this.ubezpieczenie=ubezpieczenie;
-        this.plec=plec;
-        this.czy_badany=false;
+        this.nazwisko = nazwisko;
+        this.pesel = pesel;
+        this.ubezpieczenie = ubezpieczenie;
+        this.plec = plec;
+        this.czy_badany = false;
     }
 
-
-
+    public Patient(String imie, String nazwisko, String pesel, String ubezpieczenie, char plec, boolean czy_badany) {
+        this.imie = imie;
+        this.nazwisko = nazwisko;
+        this.pesel = pesel;
+        this.ubezpieczenie = ubezpieczenie;
+        this.plec = plec;
+        this.czy_badany = czy_badany;
+    }
 
 
     //GETTERY
 
-    public Vector<Object> getPatientAsVector(){
+    public Vector<Object> getPatientAsVector() {
         Vector<Object> patientVector = new Vector<>();
-        patientVector.add(imie+" "+nazwisko);
+        patientVector.add(imie + " " + nazwisko);
         patientVector.add(plec);
         patientVector.add(pesel);
         patientVector.add(ubezpieczenie);
         patientVector.add(Boolean.FALSE);
         return patientVector;
     }
-
-
 
 
     public boolean getCzy_badany() {
@@ -93,44 +97,44 @@ public class Patient {
         this.czy_badany = czy_badany;
     }
 
-    public void setImie(String imie){
-        this.imie=imie;
+    public void setImie(String imie) {
+        this.imie = imie;
     }
 
-    public void setNazwisko(String nazwisko){
-        this.nazwisko=nazwisko;
+    public void setNazwisko(String nazwisko) {
+        this.nazwisko = nazwisko;
     }
 
-    public void setPesel(String pesel){
-        this.pesel=pesel;
+    public void setPesel(String pesel) {
+        this.pesel = pesel;
     }
 
-    public void setUbezpieczenie(String ubezpieczenie){
-        this.ubezpieczenie=ubezpieczenie;
+    public void setUbezpieczenie(String ubezpieczenie) {
+        this.ubezpieczenie = ubezpieczenie;
     }
 
-    public void setPlec(char plec){
-        this.plec=plec;
+    public void setPlec(char plec) {
+        this.plec = plec;
     }
 
     public void setDzien_badania(int dzien_badania) {
         this.dzien_badania = dzien_badania;
     }
 
-    public void setMiesiac_badania(int miesiac_badania){
-        this.miesiac_badania=miesiac_badania;
+    public void setMiesiac_badania(int miesiac_badania) {
+        this.miesiac_badania = miesiac_badania;
     }
 
-    public void setRok_badania(int rok_badania){
-        this.rok_badania=rok_badania;
+    public void setRok_badania(int rok_badania) {
+        this.rok_badania = rok_badania;
     }
 
-    public void setHDL(int HDL){
-        this.HDL=HDL;
+    public void setHDL(int HDL) {
+        this.HDL = HDL;
     }
 
-    public void setLDL(int LDL){
-        this.LDL=LDL;
+    public void setLDL(int LDL) {
+        this.LDL = LDL;
     }
 
     public void setGlicerydy(int glicerydy) {
